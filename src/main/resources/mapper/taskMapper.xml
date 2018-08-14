@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Task">
+
+
+    <select id="selectTaskExist" parameterType="string" resultType="int">
+        select count(1) from task where video_path=#{videoPath}
+    </select>
+
+    <insert id="insertTask" parameterType="com.aerothief.entity.Task" useGeneratedKeys="true" keyProperty="id">
+          insert into task
+          (`id`,`video_path`,`success`,`retry_times`,`create_time`,`update_time`)
+          value (#{id},#{videoPath},#{success},#{retryTimes},now(),now())
+    </insert>
+
+    <select id="selectUnSuccessTask" resultType="com.aerothief.entity.Task">
+        select * from task where success is null or success="false" limit 0,1
+    </select>
+
+    <update id="updateTaskSuccessById" parameterType="int">
+        update task set success="true",update_time=now()  WHERE id=#{id}
+    </update>
+
+    <update id="updateTaskWorkingById" parameterType="int">
+        update task set success="working",update_time=now() WHERE id=#{id}
+    </update>
+
+    <update id="updateTaskErrorById" parameterType="int">
+        update task set success="error",update_time=now() where id=#{id}
+    </update>
+
+
+
+</mapper>

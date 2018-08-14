@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Video">
+
+    <insert id="insertVideo" parameterType="com.aerothief.entity.Video" useGeneratedKeys="true" keyProperty="id">
+        insert into video
+        (`id`,`name`,`video_code`,`path_code`,`context`,`title`,`publish_date`,`publisher_id`,`duration`,`series_id`,`create_time`,`update_time`)
+        values (#{id},#{name},#{videoCode},#{pathCode},#{context},#{title},#{publishDate},#{publisherId},#{duration},#{seriesId},now(),now())
+    </insert>
+
+    <select id="selectVideoExistByVideoCode" parameterType="string" resultType="int">
+        select count(1) from video where video_Code=#{videoCode}
+    </select>
+
+    <select id="selectVideoByVideoCode" parameterType="string" resultType="com.aerothief.entity.Video">
+        select * from video where video_Code=#{videoCode} limit 0,1
+    </select>
+
+
+
+    <insert id="insertTheVideoToGenre" parameterType="map">
+      insert into video_to_genre (`video_id`,`genre_id`) values(#{videoId},#{genreId})
+    </insert>
+
+    <insert id="insertTheVideoToStar" parameterType="map">
+      insert into video_to_star (`video_id`,`star_id`) values(#{videoId},#{starId})
+    </insert>
+
+    <update id="updateVideo" parameterType="com.aerothief.entity.Video">
+        update video set publisher_id=#{publisherId},series_id=#{seriesId} where id=#{id}
+    </update>
+    <select id="selectVideoCount" resultType="int">
+        select count(1) from video
+    </select>
+
+</mapper>

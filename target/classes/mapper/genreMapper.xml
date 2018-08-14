@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Genre">
+
+    <select id="selectGenre" resultType="com.aerothief.entity.Genre">
+        select * from genre where 1=1
+        <if test="id!=null">
+            and id = #{id}
+        </if>
+        <if test="name!=null">
+           and `name`=#{name}
+        </if>
+        limit 0,1
+
+    </select>
+
+    <insert id="insertGenre" parameterType="com.aerothief.entity.Genre" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO genre (`name`,`id`,web_code,create_time,update_time) VALUES (#{name},#{id},#{webCode},now(),now());
+    </insert>
+
+    <insert id="insertGenreList" parameterType="com.aerothief.entity.Genre">
+        INSERT INTO genre (`name`,`id`,web_ code,create_time,update_time)
+        VALUES
+        <foreach collection="list" item="item" index= "index" separator =",">
+            (#{item.name},#{item.id},#{webCode},now(),now())
+        </foreach>
+    </insert>
+
+    <select id="selectGenreExist" parameterType="string" resultType="int">
+        select count(1) from genre where name=#{name}
+    </select>
+
+
+</mapper>
